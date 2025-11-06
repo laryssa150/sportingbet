@@ -1,0 +1,8 @@
+button {
+  background-color: #0044cc;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+}
+button:focus {
+  outline: 3px solid #ffcc00;
+}
