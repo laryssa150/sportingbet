@@ -1,13 +1,13 @@
 module.exports = function (io) {
   const express = require("express");
   const router = express.Router();
-  const SuperSocial = require("../models/SuperSocial");
+  const Engajamento = require("../models/Engajamento");
   const autenticar = require("../middleware/authMiddleware");
 
   router.post("/", autenticar, async (req, res) => {
-    const registro = await SuperSocial.create(req.body);
-    io.emit("superSocialPostado", registro);
-    res.status(201).json(registro);
+    const novo = await Engajamento.create(req.body);
+    io.emit("novoEngajamento", novo);
+    res.status(201).json(novo);
   });
 
   return router;

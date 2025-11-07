@@ -1,0 +1,21 @@
+:root {
+  --cor-primaria: #0044cc;
+  --cor-secundaria: #ffcc00;
+}
+ 
+h2 {
+  color: var(--cor-primaria);
+}
+ 
+button {
+  background-color: var(--cor-primaria);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+ 
+button:hover {
+  background-color: #003399;
+}

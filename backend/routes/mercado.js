@@ -1,12 +1,14 @@
-const express = require("express");
-const router = express.Router();
+module.exports = function (io) {
+  const express = require("express");
+  const router = express.Router();
+  const Mercado = require("../models/Mercado");
+  const autenticar = require("../middleware/authMiddleware");
 
-router.post("/validar", (req, res) => {
-  const { odds } = req.body;
-  if (odds < 1.10 || odds > 100.00) {
-    return res.status(400).send("Odds fora dos limites permitidos.");
-  }
-  res.send("Odds válidas.");
-});
+  router.post("/", autenticar, async (req, res) => {
+    const mercado = await Mercado.create(req.body);
+    io.emit("mercadoCriado", mercado);
+    res.status(201).json(mercado);
+  });
 
-module.exports = router;
+  return router;
+};

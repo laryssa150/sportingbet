@@ -9,5 +9,3 @@ function preverComportamento(usuario) {
     justificativa: `Baseado em total apostado (${usuario.totalApostado}) e ganho (${usuario.totalGanho})`
   };
 }
-
-module.exports = { preverComportamento };

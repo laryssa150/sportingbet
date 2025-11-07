@@ -1,8 +1,32 @@
+/* Estilo para botões padrão */
 button {
-  background-color: #0044cc;
-  color: #ffffff;
-  border: 2px solid #ffffff;
+  background-color: var(--cor-primaria);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
-button:focus {
-  outline: 3px solid #ffcc00;
+ 
+/* Hover */
+button:hover {
+  background-color: #003399;
+}
+ 
+/* Botões de alerta */
+button.alerta {
+  background-color: red;
+}
+ 
+/* Botões de sucesso */
+button.sucesso {
+  background-color: green;
+}
+ 
+/* Botões desabilitados */
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }

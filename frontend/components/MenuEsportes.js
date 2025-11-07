@@ -1,14 +1,13 @@
 function MenuEsportes() {
   return (
     <nav>
-      <ul role="menu">
-        <li role="menuitem" tabIndex="0">Futebol</li>
-        <li role="menuitem" tabIndex="0">Tênis</li>
-        <li role="menuitem" tabIndex="0">Basquete</li>
-        <li role="menuitem" tabIndex="0">eSports</li>
+      <ul>
+        <li>⚽ Futebol</li>
+        <li>🏀 Basquete</li>
+        <li>🎾 Tênis</li>
+        <li>🎮 eSports</li>
       </ul>
     </nav>
   );
 }
-
 export default MenuEsportes;
