@@ -6,51 +6,51 @@ module.exports = function (io) {
 
   // Registro de novo usuário
   router.post("/registro", async (req, res) => {
-    try {
-      const novoUsuario = await Usuario.create(req.body);
+  try {
+    const { nome, email, senha } = req.body;
 
-      // Emite evento de novo registro
-      io.emit("usuarioRegistrado", {
-        id: novoUsuario._id,
-        nome: novoUsuario.nome,
-        email: novoUsuario.email,
-        perfil: novoUsuario.perfil
+    // Validação básica
+    if (!nome || !email || !senha) {
+      return res.status(400).json({
+        erro: "Nome, e-mail e senha são obrigatórios"
       });
-
-      res.status(201).json(novoUsuario);
-    } catch (err) {
-      res.status(400).json({ erro: "Erro ao registrar usuário", detalhes: err.message });
     }
-  });
 
-  // Login de usuário
-  router.post("/login", async (req, res) => {
-    try {
-      const { email, senha } = req.body;
-      const usuario = await Usuario.findOne({ email });
+    // Criação do usuário
+    const novoUsuario = await Usuario.create({
+      nome,
+      email,
+      senha
+    });
 
-      if (!usuario) return res.status(404).json({ erro: "Usuário não encontrado" });
+    const usuarioPublico = {
+      id: novoUsuario._id,
+      nome: novoUsuario.nome,
+      email: novoUsuario.email,
+      perfil: novoUsuario.perfil
+    };
 
-      const senhaValida = await usuario.validarSenha(senha);
-      if (!senhaValida) return res.status(401).json({ erro: "Senha incorreta" });
+    // Evento Socket.io
+    io.emit("usuarioRegistrado", usuarioPublico);
 
-      const token = jwt.sign({ id: usuario._id, perfil: usuario.perfil }, process.env.JWT_SECRET, {
-        expiresIn: "7d"
+    // Resposta sem dados sensíveis
+    res.status(201).json(usuarioPublico);
+
+  } catch (err) {
+    // E-mail duplicado (MongoDB)
+    if (err.code === 11000) {
+      return res.status(400).json({
+        erro: "Este e-mail já está cadastrado"
       });
-
-      // Emite evento de login
-      io.emit("usuarioLogado", {
-        id: usuario._id,
-        nome: usuario.nome,
-        email: usuario.email,
-        perfil: usuario.perfil
-      });
-
-      res.json({ token });
-    } catch (err) {
-      res.status(500).json({ erro: "Erro ao fazer login", detalhes: err.message });
     }
-  });
 
-  return router;
-};
+    console.error("Erro ao registrar usuário:", err);
+
+    res.status(500).json({
+      erro: "Erro interno ao registrar usuário"
+    });
+  }
+});
+
+ return router;
+}

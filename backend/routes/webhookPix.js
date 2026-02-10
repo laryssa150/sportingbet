@@ -5,14 +5,22 @@ module.exports = function (io) {
   const fs = require("fs");
   const path = require("path");
 
-  // Função para registrar log
-  function registrarLog(mensagem) {
-    const logPath = path.join(__dirname, "../logs/webhook.log");
-    const linha = `[${new Date().toISOString()}] ${mensagem}\n`;
-    fs.appendFileSync(logPath, linha);
+  const logsDir = path.join(__dirname, "../logs");
+  const logPath = path.join(logsDir, "webhook.log");
+
+  // Garante que a pasta de logs exista
+  if (!fs.existsSync(logsDir)) {
+    fs.mkdirSync(logsDir, { recursive: true });
   }
 
-  // Webhook da OpenPix com validação de token
+  function registrarLog(mensagem) {
+    const linha = `[${new Date().toISOString()}] ${mensagem}\n`;
+    fs.appendFile(logPath, linha, err => {
+      if (err) console.error("Erro ao salvar log:", err.message);
+    });
+  }
+
+  // Webhook da OpenPix
   router.post("/pix", async (req, res) => {
     const tokenRecebido = req.headers["x-webhook-token"];
     const tokenEsperado = process.env.OPENPIX_WEBHOOK_TOKEN;
@@ -24,7 +32,7 @@ module.exports = function (io) {
 
     const { charge } = req.body;
 
-    if (!charge || !charge.id) {
+    if (!charge?.id) {
       registrarLog("⚠️ Webhook recebido com dados incompletos");
       return res.status(400).json({ erro: "Dados inválidos do webhook" });
     }
@@ -43,7 +51,7 @@ module.exports = function (io) {
         registrarLog(`⚠️ Pagamento não encontrado para Pix ID: ${charge.id}`);
       }
 
-      res.status(200).json({ sucesso: true });
+      res.json({ sucesso: true });
     } catch (err) {
       registrarLog(`❌ Erro interno: ${err.message}`);
       res.status(500).json({ erro: "Erro interno" });

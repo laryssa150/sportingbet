@@ -1,14 +1,25 @@
 const jwt = require("jsonwebtoken");
- 
+
 function autenticar(req, res, next) {
-  const token = req.headers.authorization?.split(" ")[1];
-  if (!token) return res.sendStatus(401);
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(401).json({ erro: "Token não informado" });
+  }
+
+  const [, token] = authHeader.split(" ");
+
+  if (!token) {
+    return res.status(401).json({ erro: "Token malformado" });
+  }
+
   try {
-    req.usuario = jwt.verify(token, process.env.JWT_SECRET);
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    req.usuario = payload;
     next();
-  } catch {
-    res.sendStatus(403);
+  } catch (err) {
+    return res.status(403).json({ erro: "Token inválido ou expirado" });
   }
 }
- 
+
 module.exports = { autenticar };

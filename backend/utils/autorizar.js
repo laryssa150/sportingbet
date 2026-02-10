@@ -1,8 +1,15 @@
-function autorizar(papel) {
+function autorizar(papeisPermitidos = []) {
   return (req, res, next) => {
-    if (req.usuario?.perfil !== papel) return res.sendStatus(403);
+    if (!req.usuario) {
+      return res.status(401).json({ erro: "Usuário não autenticado" });
+    }
+
+    if (!papeisPermitidos.includes(req.usuario.perfil)) {
+      return res.status(403).json({ erro: "Permissão insuficiente" });
+    }
+
     next();
   };
 }
- 
+
 module.exports = { autorizar };

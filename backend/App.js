@@ -1,43 +1,66 @@
 const express = require("express");
 const http = require("http");
-const socketio = require("socket.io");
+const { Server } = require("socket.io");
 const cors = require("cors");
 require("dotenv").config();
-require("./mongo"); // Conecta ao MongoDB
+require("./mongo"); // Conexão com MongoDB
 
 const app = express();
-const server = http.createServer(app);
-const io = socketio(server, { cors: { origin: "*" } });
 
+// Middlewares globais
 app.use(cors());
 app.use(express.json());
 
+// Servidor HTTP e Socket.io
+const server = http.createServer(app);
+const io = new Server(server, { cors: { origin: "*" } });
+
+// Função para importar rotas com verificação
+function usarRota(caminho, rotaPath) {
+  try {
+    const rota = require(rotaPath);
+    if (typeof rota !== "function") throw new Error(`${rotaPath} não exporta uma função`);
+    app.use(caminho, rota(io));
+  } catch (err) {
+    console.error(`❌ Erro ao carregar rota ${caminho}:`, err.message);
+  }
+}
+
 // ROTAS COM EMISSÃO DE EVENTOS
-app.use("/api/apostas", require("./routes/apostas")(io));
-app.use("/api/pagamentos", require("./routes/pagamentos")(io));
-app.use("/api/saques", require("./routes/saques")(io));
-app.use("/api/campanhas", require("./routes/campanhas")(io));
-app.use("/api/seguranca", require("./routes/seguranca")(io));
-app.use("/api/engajamento", require("./routes/engajamento")(io));
-app.use("/api/margem", require("./routes/margem")(io));
-app.use("/api/riscos", require("./routes/riscos")(io));
-app.use("/api/relatorios", require("./routes/relatorios")(io));
-app.use("/api/ia", require("./routes/ia")(io));
-app.use("/api/supersocial", require("./routes/supersocial")(io));
-app.use("/api/teste", require("./routes/teste")(io));
-app.use("/api/usuarios", require("./routes/usuario")(io));
-app.use("/api/mercado", require("./routes/mercado")(io));
-app.use("/api/admin", require("./routes/admin")(io));
-app.use("/api/webhook", require("./routes/webhookPix")(io));
+usarRota("/api/apostas", "./routes/apostas");
+usarRota("/api/pagamentos", "./routes/pagamentos");
+usarRota("/api/saques", "./routes/saques");
+usarRota("/api/campanhas", "./routes/campanhas");
+usarRota("/api/seguranca", "./routes/seguranca");
+usarRota("/api/engajamento", "./routes/engajamento");
+usarRota("/api/margem", "./routes/margem");
+usarRota("/api/riscos", "./routes/riscos");
+usarRota("/api/relatorios", "./routes/relatorios");
+usarRota("/api/ia", "./routes/ia");
+usarRota("/api/supersocial", "./routes/supersocial");
+usarRota("/api/teste", "./routes/teste");
+usarRota("/api/usuarios", "./routes/usuario");
+usarRota("/api/mercado", "./routes/mercado");
+usarRota("/api/admin", "./routes/admin");
+usarRota("/api/webhook", "./routes/webhookPix");
 
-
-// SOCKET.IO CONEXÃO
+// SOCKET.IO: conexão e desconexão
 io.on("connection", socket => {
   console.log("🔔 Cliente conectado via Socket.io:", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log(`🔔 Cliente desconectado: ${socket.id}`);
+  });
 });
 
-// INICIA SERVIDOR
-const PORT = process.env.PORT || 3000;
+// Middleware de erro global
+app.use((err, req, res, next) => {
+  console.error("🔥 ERRO GLOBAL:", err);
+  res.status(500).json({ erro: "Erro interno do servidor" });
+});
+
+// Inicia servidor
+const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`🚀 SuperBet rodando com notificações na porta ${PORT}`);
 });

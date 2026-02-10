@@ -1,7 +1,7 @@
 module.exports = function (io) {
   const express = require("express");
   const router = express.Router();
-  const { preverComportamento } = require("../services/ia");
+  const { preverComportamento } = require("./ia");
   const autenticar = require("../middleware/authMiddleware");
   const registrarLog = require("../middleware/logAuditoria");
 
@@ -20,3 +20,5 @@ module.exports = function (io) {
 
   return router;
 };
+
+
