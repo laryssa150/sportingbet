@@ -1,8 +1,8 @@
 module.exports = function (io) {
   const express = require("express");
   const router = express.Router();
-  const { preverComportamento } = require("./ia");
-  const autenticar = require("../middleware/authMiddleware");
+  const { preverComportamento } = require("../routes/ia");
+  const { autenticar } = require("../../middleware/authMiddleware");
   const registrarLog = require("../middleware/logAuditoria");
 
   router.post(

@@ -2,7 +2,7 @@ module.exports = function (io) {
   const express = require("express");
   const router = express.Router();
   const Campanha = require("../models/Campanha");
-  const autenticar = require("../../middleware/authMiddleware");
+   const { autenticar } = require("../../middleware/authMiddleware");
   const registrarLog = require("../../middleware/logAuditoria");
 
   // Criação de campanha

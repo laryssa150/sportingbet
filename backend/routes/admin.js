@@ -1,12 +1,9 @@
 module.exports = function (io) { 
   const express = require("express");
   const router = express.Router();
-  const autenticar = require("../../middleware/authMiddleware");
+  const { autenticar } = require("../../middleware/authMiddleware");
   const AdminLog = require("../models/AdminLog");
 
-
-
-  // Registrar uma ação administrativa
   router.post("/acao", autenticar, async (req, res) => {
     try {
       const { tipo, descricao } = req.body;
@@ -18,8 +15,9 @@ module.exports = function (io) {
         criadoEm: new Date()
       });
 
-      io.emit("acaoAdmin", log); // 🔔 Notificação para o frontend
+      io.emit("acaoAdmin", log);
       res.status(201).json(log);
+
     } catch (error) {
       console.error(error);
       res.status(500).json({ erro: "Erro ao registrar ação administrativa" });

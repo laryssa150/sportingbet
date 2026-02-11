@@ -4,8 +4,9 @@
   "description": "Plataforma de apostas esportivas e cassino com Supersocial, IA e conformidade legal.",
   "main": "backend/app.js",
   "scripts": {
-    "start": "node backend/App.js",
-    "dev": "nodemon backend/app.js"
+      "dev": "nodemon backend/App.js",
+  "start": "node backend/App.js"
+   
   },
   "keywords": [
     "apostas",
@@ -31,7 +32,16 @@
     "socket.io": "^4.8.3"
   },
   "devDependencies": {
+    "concurrently": "^9.2.1",
     "nodemon": "^3.0.2",
     "sequelize-cli": "^6.6.5"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laryssa150/sportingbet.git"
+  },
+  "bugs": {
+    "url": "https://github.com/laryssa150/sportingbet/issues"
+  },
+  "homepage": "https://github.com/laryssa150/sportingbet#readme"
 }

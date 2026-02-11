@@ -35,7 +35,7 @@ usarRota("/api/seguranca", "./routes/seguranca");
 usarRota("/api/engajamento", "./routes/engajamento");
 usarRota("/api/margem", "./routes/margem");
 usarRota("/api/riscos", "./routes/riscos");
-usarRota("/api/relatorios", "./routes/relatorios");
+usarRota("/api/relatorios", "./routes/relatorio");
 usarRota("/api/ia", "./routes/ia");
 usarRota("/api/supersocial", "./routes/supersocial");
 usarRota("/api/teste", "./routes/teste");

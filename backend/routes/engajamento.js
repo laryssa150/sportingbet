@@ -1,7 +1,7 @@
 module.exports = function (io) {
   const express = require("express");
   const router = express.Router();
-  const Engajamento = require("./engajamento");
+  const Engajamento = require("../routes/engajamento");
   const autenticar = require("../../middleware/authMiddleware");
 
   router.post("/", autenticar, async (req, res) => {
