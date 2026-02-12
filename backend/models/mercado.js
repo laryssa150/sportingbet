@@ -1,14 +1,12 @@
-module.exports = function (io) {
-  const express = require("express");
-  const router = express.Router();
-  const Mercado = require("../models/mercado");
-  const { autenticar } = require("../../middleware/authMiddleware");
+const mongoose = require("../mongo");
 
-  router.post("/", autenticar, async (req, res) => {
-    const mercado = await Mercado.create(req.body);
-    io.emit("mercadoCriado", mercado);
-    res.status(201).json(mercado);
-  });
+const MercadoSchema = new mongoose.Schema({
+  esporte: String,
+  evento: String,
+  mercado: String,
+  odd: Number,
+  ativo: { type: Boolean, default: true },
+  criadoEm: { type: Date, default: Date.now }
+});
 
-  return router;
-};
+module.exports = mongoose.model("Mercado", MercadoSchema);

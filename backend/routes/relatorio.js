@@ -2,7 +2,8 @@ module.exports = function (io) {
   const express = require("express");
   const router = express.Router();
   const Relatorio = require("../models/Relatorio");
-  const { autenticar } = require("../../middleware/authMiddleware");
+  const autenticar = require("../../middleware/authMiddleware");
+
 ;
 
   router.post("/", autenticar, async (req, res) => {

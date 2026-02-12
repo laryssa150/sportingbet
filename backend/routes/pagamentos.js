@@ -2,7 +2,8 @@ module.exports = function (io) {
   const express = require("express");
   const router = express.Router();
   const Pagamento = require("../models/Pagamento");
-  const { autenticar } = require("../../middleware/authMiddleware");  
+  const autenticar = require("../../middleware/authMiddleware");
+
   const { gerarCobrancaPix } = require("../services/openPix");
 
   router.post("/", autenticar, async (req, res) => {

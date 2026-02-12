@@ -28,6 +28,7 @@ function usarRota(caminho, rotaPath) {
 
 // ROTAS COM EMISSÃO DE EVENTOS
 usarRota("/api/apostas", "./routes/apostas");
+
 usarRota("/api/pagamentos", "./routes/pagamentos");
 usarRota("/api/saques", "./routes/saques");
 usarRota("/api/campanhas", "./routes/campanhas");

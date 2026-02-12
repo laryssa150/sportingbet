@@ -1,7 +1,7 @@
 module.exports = function (io) { 
   const express = require("express");
   const router = express.Router();
-  const { autenticar } = require("../../middleware/authMiddleware");
+  const autenticar = require("../../middleware/authMiddleware");
   const AdminLog = require("../models/AdminLog");
 
   router.post("/acao", autenticar, async (req, res) => {

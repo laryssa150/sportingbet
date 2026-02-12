@@ -13,7 +13,7 @@ const AdminLogSchema = new mongoose.Schema({
   },
   admin: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Usuario", // ou "Admin" se você tiver model separado
+    ref: "admin", // ou "Admin" se você tiver model separado
     required: true
   },
   criadoEm: {
